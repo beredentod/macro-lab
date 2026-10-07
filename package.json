@@ -1,0 +1,1 @@
+{"name":"macro-lab","version":"1.0.0","private":true,"type":"module","description":"An interactive discrete-time Solow laboratory","scripts":{"start":"node server.mjs","dev":"node server.mjs","test":"node --test model.test.js"},"engines":{"node":">=18"}}
