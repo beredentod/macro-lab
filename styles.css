@@ -260,3 +260,7 @@ i.golden{display:inline-block;width:15px;border-top:2px dashed #7956a3;vertical-
 @media(max-width:999px){.ramsey-workspace .plots{height:690px;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}.r-panel{display:block;overflow:visible!important}.r-panel .control-toolbar{display:flex}.r-row-content .response h2{font-size:11px}.ramsey-workspace.controls-hidden #r-panel-show{top:66px}}
 @media(max-width:600px){header nav{display:flex;gap:9px;margin:0}.model-tab{font-size:11px;padding:8px 0}.ramsey-workspace .plots{display:flex;flex-direction:column;height:auto}.ramsey-workspace .main-plot{height:390px}.ramsey-workspace .r-responses{height:650px;flex:none}.r-row-content{gap:2px}.r-row-content .response{padding:2px}.r-row-content .response h2{font-size:10px}.r-row-content .response output{font-size:9px}.r-cards strong{font-size:14px}.r-cards>div>span{font-size:9px}.ramsey-workspace .equations{font-size:10px}.r-panel{display:block}.ramsey-active #help,.ramsey-active #reset{display:inline-flex}}
 @media(max-width:600px){header{height:auto;flex-wrap:wrap;gap:5px 10px}.brand{margin-right:auto}header nav{order:3;width:100%;justify-content:center}header .quiet{font-size:10px}.r-responses .response-key{font-size:9px;gap:7px;flex-wrap:wrap}}
+
+/* Keep the model switcher above adjacent chart panels at every viewport size. */
+header{position:relative;z-index:10}
+header nav{position:relative;z-index:11}

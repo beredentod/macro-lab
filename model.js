@@ -2,7 +2,7 @@
  * gamma and n are GROSS growth factors, following Broer's lecture.
  * A capital-augmenting level theta enters as (theta K)^alpha.
  */
-export const DEFAULTS = Object.freeze({alpha: 1/3, gamma: 1, n: 1, delta: .08, s: .20, theta: 1});
+export const DEFAULTS = Object.freeze({alpha: 1/3, gamma: 1, n: 1, delta: .75, s: .33, theta: 1});
 export function validate(p) {
   if (!(p.alpha>0 && p.alpha<1 && p.gamma>=1 && p.n>=1 && p.delta>0 && p.delta<1 && p.s>0 && p.s<1 && p.theta>0)) throw Error('Invalid Solow parameters');
 }

@@ -5,8 +5,8 @@ const specs=[
  ['alpha','\\alpha','Capital share',.1,.7,.01],
  ['gamma','\\gamma','Technology growth',1,1.06,.001],
  ['n','n','Population growth',1,1.04,.001],
- ['delta','\\delta','Depreciation',.01,.25,.005],
- ['s','s','Saving rate',.02,.8,.01],
+ ['delta','\\delta','Depreciation',.01,.9,.005],
+ ['s','s','Saving rate',.02,.9,.01],
  ['theta','\\theta','Capital augmentation',.5,2,.05]
 ];
 const START_PARAMS={...DEFAULTS,gamma:1.02,n:1.01};
