@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 const root = new URL('./', import.meta.url);
 const allowed = new Map([
   ['index.html','text/html; charset=utf-8'], ['styles.css','text/css; charset=utf-8'],
-  ['app.js','text/javascript; charset=utf-8'], ['model.js','text/javascript; charset=utf-8'],
+  ['solow-app.js','text/javascript; charset=utf-8'], ['app.js','text/javascript; charset=utf-8'], ['model.js','text/javascript; charset=utf-8'],
+  ['ramsey-app.js','text/javascript; charset=utf-8'], ['ramsey-model.js','text/javascript; charset=utf-8'],
   ['favicon.svg','image/svg+xml']
 ]);
 allowed.set('vendor/katex/katex.min.js', 'text/javascript; charset=utf-8');
@@ -30,7 +31,7 @@ server.on('error', error => {
   process.exitCode = 1;
 });
 server.listen(port, '127.0.0.1', () => {
-  const url = `http://localhost:${port}`;
+  const url = `http://localhost:${server.address().port}`;
   console.log(`Macro lab: ${url}\nSave your edits, then refresh your browser. Stop with Ctrl+C.`);
   if (process.argv.includes('--open')) {
     const command = process.platform === 'win32' ? 'cmd' : process.platform === 'darwin' ? 'open' : 'xdg-open';

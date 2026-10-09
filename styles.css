@@ -195,3 +195,68 @@ i.golden{display:inline-block;width:15px;border-top:2px dashed #7956a3;vertical-
 .section-head .badge{transform:translateY(-3px)}
 .workspace.controls-hidden #panel-expand{top:56px}
 @media(max-width:999px){.workspace.controls-hidden #panel-expand{top:66px;right:8px}}
+
+/* Ramsey tab keeps the Solow DOM and state independent. */
+.workspace[hidden],#ramsey-workspace[hidden]{display:none!important}
+.model-tab{border:0;border-radius:0;background:transparent;color:#82918c;padding:13px 0;white-space:nowrap;font-size:14px}
+.model-tab.active{color:var(--teal);font-weight:600;border-bottom:2px solid var(--teal)}
+.model-tab:hover{background:transparent;color:var(--teal)}
+.ramsey-active #help,.ramsey-active #reset{display:inline-flex}
+.ramsey-workspace .plots{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}
+.ramsey-workspace .r-responses{display:flex;flex-direction:column;min-height:0;gap:5px}
+.ramsey-workspace .response-key{display:flex;flex:none;min-height:16px;gap:13px;grid-column:auto;grid-row:auto;padding:0 3px 2px}
+.r-rows{display:flex;flex-direction:column;gap:5px;flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;--r-chart-height:100px}
+.r-row{background:#fff;border:1px solid var(--line);border-radius:8px;min-height:27px;flex:none;overflow:hidden}
+.r-row[open]{flex:none;display:flex;flex-direction:column}
+.r-row:not([open])>.r-row-content{display:none}
+.r-row summary{list-style:none;cursor:pointer;padding:5px 10px;color:#355e56;font-size:11px;font-weight:600;line-height:16px;display:flex;justify-content:space-between;align-items:center;flex:none}
+.r-row summary::-webkit-details-marker{display:none}
+.r-row[open] summary{border-bottom:1px solid var(--line)}
+.r-row[open] summary span{transform:rotate(180deg)}
+.r-row-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;flex:none;min-height:0;padding:4px}
+.r-row-content .response{border:0;border-radius:5px;background:#fdfefe;padding:3px 5px 0}
+.r-row-content .plot-heading{height:21px;margin-bottom:2px;flex:none}
+.r-row-content .response h2{font-size:12px}
+.r-row-content .response output{font-size:11px}
+.r-row-content .response .mini-frame{min-height:0;flex:none;height:var(--r-chart-height);max-height:none}
+.r-row-content .r-live{justify-content:center;gap:5px}
+.r-row-content .r-live .metrics strong{font-size:16px}
+.r-row-content .r-live .growth-readout{font-size:9px;margin:0}
+.r-phase-legend{margin-bottom:6px;flex-wrap:wrap}
+.r-phase-actions{display:flex;gap:5px;align-items:center}
+.r-phase-actions button{font-size:10px;padding:3px 6px;white-space:nowrap}
+#r-unstable.selected{color:#a34855;border-color:#d3a0a7;background:#fbf1f2}
+.r-tvc{font-size:10px;color:var(--teal);background:#eef7f3;border:1px solid #d6e8de;border-radius:5px;padding:5px 8px;margin-bottom:7px;line-height:1.35;flex:none}
+.r-tvc[data-status="violated"],.r-tvc[data-status="diverging"]{color:#a34855;background:#fbf1f2;border-color:#edcbd0}
+.r-tvc[data-status="boundary"]{color:#956823;background:#fbf5e9;border-color:#ecddbb}
+.r-shock-kind{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.r-shock-kind button{font-size:10px;padding:5px 3px}
+.r-shock-kind .selected{background:#e8f2ee;border-color:#88b1a5;color:var(--teal)}
+.r-control-note{font-size:10px;color:var(--muted);line-height:1.4;margin:5px 0 7px}
+.r-restore{font-size:10px;padding:4px 7px;color:var(--teal)}
+.r-kline,.r-cline{display:inline-block;width:15px;border-top:2px dashed #467da0}
+.r-cline{border-color:#7956a3;border-top-style:dotted}
+.r-cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+.r-cards strong{font-size:19px}
+.r-control-group{border-top:1px solid var(--line);padding:5px 0;flex:none}
+.r-control-group summary{cursor:pointer;list-style:none;padding:5px 0;font:15px Georgia,serif;color:#345a52;display:flex;justify-content:space-between}
+.r-control-group summary::-webkit-details-marker{display:none}
+.r-control-group summary:after{content:'⌄';font:15px Arial;color:var(--teal)}
+.r-control-group[open] summary:after{transform:rotate(180deg)}
+.r-control-group .slider{margin:8px 0 12px}
+.r-control-group .slider input{margin-top:8px}
+.r-control-group .slider output{font-size:12px}
+.r-control-group .slider-head label>span:last-child{font-size:11px}
+.r-control-group .growth-presets{margin:5px 0 9px}
+.r-control-group .experiment{margin:6px 0 0;padding:8px 0 0}
+.r-control-group .setup-row{border:0}
+.r-subsection-label{font-size:9px;letter-spacing:.12em;color:var(--muted);border-top:1px solid var(--line);padding-top:9px;margin-top:10px}
+.r-panel{overflow-y:auto!important;scrollbar-width:thin}
+.r-panel-foot{display:flex;gap:5px;justify-content:space-between;margin-top:auto;border-top:1px solid var(--line);padding-top:7px}
+.r-panel-foot button{font-size:11px}
+.ramsey-workspace.controls-hidden #r-panel{display:none}
+.ramsey-workspace.controls-hidden #r-panel-show{display:inline-flex;position:absolute;right:12px;top:56px;z-index:5;align-items:center;justify-content:center;padding:2px 7px;border:1px solid #cbd8d4;background:#fbfdfc;color:var(--teal)}
+#r-panel-show[hidden]{display:none}
+@media(max-width:999px){.ramsey-workspace .plots{height:690px;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}.r-panel{display:block;overflow:visible!important}.r-panel .control-toolbar{display:flex}.r-row-content .response h2{font-size:11px}.ramsey-workspace.controls-hidden #r-panel-show{top:66px}}
+@media(max-width:600px){header nav{display:flex;gap:9px;margin:0}.model-tab{font-size:11px;padding:8px 0}.ramsey-workspace .plots{display:flex;flex-direction:column;height:auto}.ramsey-workspace .main-plot{height:390px}.ramsey-workspace .r-responses{height:650px;flex:none}.r-row-content{gap:2px}.r-row-content .response{padding:2px}.r-row-content .response h2{font-size:10px}.r-row-content .response output{font-size:9px}.r-cards strong{font-size:14px}.r-cards>div>span{font-size:9px}.ramsey-workspace .equations{font-size:10px}.r-panel{display:block}.ramsey-active #help,.ramsey-active #reset{display:inline-flex}}
+@media(max-width:600px){header{height:auto;flex-wrap:wrap;gap:5px 10px}.brand{margin-right:auto}header nav{order:3;width:100%;justify-content:center}header .quiet{font-size:10px}.r-responses .response-key{font-size:9px;gap:7px;flex-wrap:wrap}}

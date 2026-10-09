@@ -1,1 +1,1 @@
-{"name":"macro-lab","version":"1.0.0","private":true,"type":"module","description":"An interactive discrete-time Solow laboratory","scripts":{"start":"node server.mjs","dev":"node server.mjs","test":"node --test model.test.js"},"engines":{"node":">=18"}}
+{"name":"macro-lab","version":"1.1.0","private":true,"type":"module","description":"Interactive discrete-time Solow and Ramsey growth models","scripts":{"start":"node server.mjs","dev":"node server.mjs","test":"node --test model.test.js ramsey-model.test.js"},"engines":{"node":">=18"}}

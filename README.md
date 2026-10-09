@@ -1,114 +1,128 @@
 # Macro lab
 
-A self-contained, interactive Solow dashboard for PSE Macro I. Static HTML, CSS and JavaScript, with locally bundled KaTeX. No package installation, build step, API key, or internet connection is needed after downloading.
+**An interactive browser dashboard for the Solow and Ramsey growth models.**
+
+Explore how saving, growth, depreciation, preferences, and policy shape an economy's transition over time. Macro lab is a static website built with HTML, CSS, and JavaScript. It runs locally without a package install and can be hosted on GitHub Pages.
+
+> An educational companion to PSE Macro I lecture material. It is not an official Paris School of Economics product.
+
+## What you can explore
+
+| Model | Main diagram | Experiments |
+| --- | --- | --- |
+| **Solow** | The law of motion for capital per effective worker, the 45-degree line, steady states, and the golden rule | Saving, depreciation, capital-share, technology-growth, and population-growth changes |
+| **Ramsey** | The $(k_t,c_t)$ phase diagram, nullclines, steady state, and stable saddle path | CRRA utility, capital-income taxes, announced and surprise policy changes, and off-saddle initial consumption |
+
+Both tabs include animated transition paths and time graphs. Ramsey adds a transversality-condition diagnostic, nearby unstable paths, and foldable graph and control sections. The Solow tab includes aggregate series and a golden-rule benchmark.
 
 ## Run locally
 
-1. Extract the ZIP. Open the `macro-lab` folder.
-2. With Node.js 18 or later installed, double-click **start-local.bat** on Windows. On macOS/Linux, run `sh start-local.sh`.
-3. Alternatively, open a terminal in that folder and run:
+**Requirements:** Node.js 18 or newer. No `npm install` is required.
+
+1. Open a terminal in this project folder.
+2. Start the local server:
 
    ```sh
    npm start
    ```
 
-4. Open **http://localhost:8001**. Keep the terminal open. Stop with Ctrl+C.
+3. Visit <http://localhost:8001>. Keep the terminal open while using the dashboard. Stop the server with `Ctrl+C`.
 
-Python alternative: `python -m http.server 8001`, then open the same address. Open through a local server, not by double-clicking index.html: browsers restrict JavaScript modules on file:// URLs.
+You can also double-click `start-local.bat` on Windows, or run `sh start-local.sh` on macOS or Linux. Alternatively, Python can serve the folder with `python -m http.server 8001`. Use a local server rather than opening `index.html` directly, because browsers restrict JavaScript modules on `file://` URLs.
 
-If port 8001 is already in use, stop the other server or use a different port. With Node, use `PORT=8002 npm start` on macOS/Linux, `$env:PORT=8002; npm start` in PowerShell, or `set PORT=8002` followed by `npm start` in Windows Command Prompt.
+To use a different port, set `PORT` before starting the Node server. For example, on macOS or Linux:
 
-## Publish on GitHub Pages
+```sh
+PORT=8002 npm start
+```
 
-This is ready for a normal GitHub Pages project repository.
+In PowerShell, use `$env:PORT=8002; npm start`.
 
-1. Create a repository, for example `macro-lab`.
-2. Upload the **contents** of this folder, with `index.html` at the repository root. Include the complete `vendor` folder and `.nojekyll` file.
-3. In the repository, open **Settings → Pages**.
-4. Select **Deploy from a branch**, then the **main** branch and **/(root)** folder, and save.
-5. GitHub will provide the published URL, normally `https://YOUR-USERNAME.github.io/macro-lab/`.
+## Publish with GitHub Pages
 
-All application asset links are relative, so repository subpaths work without configuration. No Node server runs on GitHub Pages; GitHub serves the static files. The project has not been published to your GitHub account.
+The site is static. GitHub Pages serves the checked-in HTML, stylesheets, scripts, and KaTeX assets directly, so a Pages build workflow or Node server is not required.
 
-Official instructions: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+1. Create a GitHub repository for the dashboard.
+2. Put the **contents of this folder** at the repository root. Confirm that `index.html` is at the root, alongside `styles.css` and the JavaScript files.
+3. Before pushing, review the publishing checklist below.
+4. On GitHub, open **Settings → Pages**.
+5. Under the build and deployment settings, choose **Deploy from a branch**, then select the `main` branch and the `/(root)` folder. Save.
+6. Wait for the Pages deployment to finish. GitHub will show the site URL in the Pages settings. For a project repository, it usually looks like `https://YOUR-USERNAME.github.io/REPOSITORY-NAME/`.
 
-## First experiment
+The asset paths are relative, so the dashboard works from a project URL with a repository subpath. Keep `.nojekyll` and the complete `vendor/katex/` folder in the repository.
 
-Click **Higher saving**. With defaults, the saving rate rises from 20% to 30% at period 20. Animation begins two periods before the shock.
+Official guide: [Configuring a publishing source for GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
-- The main diagram compares the original and new laws of motion, with a true 45-degree line and an amber cobweb trajectory.
-- Consumption falls at the shock date, while the capital stock is unchanged on impact.
-- Saving rises immediately. Capital begins rising the following period.
-- Consumption recovers as the economy converges. With this calibration, its new steady-state level exceeds its original level.
-- The small graphs show the full paths; dotted teal is the future, solid teal is the elapsed path, and dashed gray is the no-shock counterfactual.
+### Before you push
 
-Use **Initial** and **After shock** to edit the two parameter sets. Editing an After shock slider pauses at the shock date so its immediate effects are visible. Click Play or Replay to animate. Initial capital follows the initial steady state until you enter a custom value. “Set to initial steady state” restores that link. Presets replace the post-shock parameter set with the initial parameters plus the selected change. One permanent, potentially multiparameter shock is supported per experiment.
+- Make the repository root the contents of `macro-lab`, not its parent folder. Lecture PDFs stored outside this folder should stay out of the repository unless you have permission to redistribute them.
+- Check the staged file list and inspect the changes:
 
-The time slider scrubs both forward and backward; the step button advances exactly one period. The finite horizon is 80, 160, or 320 periods. Slow economies need not converge within the selected horizon: steady-state markers are analytical limits, not the last simulated observation. The new law of motion appears faintly before the shock and becomes prominent at the shock date. Numeric readouts always show the exact observation at the integer period displayed. Motion between these dates is only a visual interpolation of the cobweb.
+  ```sh
+  git status --short
+  git diff --cached --name-only
+  git diff --cached
+  ```
 
-## Equations and notation
+- Open the repository's GitHub Pages URL after deployment. Check that both tabs, the KaTeX equations, charts, and controls load correctly.
+- This project has no project-wide license file. The bundled KaTeX license is in `vendor/katex/LICENSE`. Add a license only if you intend to grant others reuse rights for your code.
 
-Time is discrete. Following Tobias Broer's **Key Facts and the Solow Model**, slides 30–44 and 50:
+Assume that anything committed to a public repository can be viewed and copied by others. Do not commit private notes, credentials, or files you do not intend to share.
 
-```math
+## Model notes
+
+### Solow
+
+Time is discrete. Production is Cobb–Douglas:
+
+$$
 Y_t=(\theta K_t)^\alpha(A_tN_t)^{1-\alpha},\qquad
-k_t=\frac{K_t}{A_tN_t},\quad y_t=f(k_t)=(\theta k_t)^\alpha.
+k_t=\frac{K_t}{A_tN_t},\qquad y_t=(\theta k_t)^\alpha.
+$$
+
+Capital per effective worker follows
+
+$$
+k_{t+1}=\frac{(1-\delta)k_t+s y_t}{\gamma n}.
+$$
+
+Here, $\gamma=A_{t+1}/A_t$ and $n=N_{t+1}/N_t$ are **gross growth factors**. For example, $\gamma=1.02$ means 2% technology growth per period. The defaults set $A_0=N_0=1$ and $\theta=1$. The optional $\theta$ parameter is a capital-augmenting level.
+
+At the shock date, capital, technology, and labor are predetermined. The new parameters affect production and factor prices immediately, while capital changes through accumulation. A change in $\gamma$ or $n$ changes subsequent growth, not the current level.
+
+### Ramsey
+
+The Ramsey tab uses CRRA utility, with logarithmic utility at $\sigma=1$, and a central-planner resource constraint. Its Cobb–Douglas production function and growth notation match the Solow tab. The main diagram displays consumption against capital, including the capital and consumption nullclines, steady state, and stable saddle path.
+
+Capital-income tax experiments use the after-tax return in the Euler equation, with tax receipts returned as lump-sum transfers. With a positive tax, the resulting steady state is a taxed equilibrium rather than the undistorted planner optimum. Anticipated changes are announced at $t=0$; unanticipated changes take effect at the selected shock date. The transversality indicator diagnoses whether the selected path follows the stable saddle path or diverges from it.
+
+## Develop and test
+
+The checked-in browser scripts run as-is. When changing the Ramsey model source, rebuild the standalone browser script and run the tests:
+
+```sh
+npm run build
+npm test
 ```
 
-```math
-K_{t+1}=(1-\delta)K_t+sY_t,\qquad
-k_{t+1}=\frac{(1-\delta)k_t+s f(k_t)}{\gamma n}.
-```
-
-```math
-c_t=(1-s)y_t,\quad i_t=s y_t,\qquad
-\bar k=\left(\frac{s\theta^\alpha}{\gamma n-1+\delta}\right)^{1/(1-\alpha)}.
-```
-
-- **γ and n are gross growth factors**, not net growth rates. γ = 1.02 means 2% technology growth. n = 1.01 means 1% population growth. The dashboard also displays the net percentages.
-- **A₀ = N₀ = 1**. Equivalently their initial log levels are zero. Zero levels would make production vanish and intensive units undefined. The initial growth rates are zero: γ = n = 1 by default.
-- **θ = 1** by default. Optional θ is capital augmentation, entering as `(θ K)^α`, not a multiplier on output. Changing θ permanently changes a level, not the technology growth rate.
-- The third time path is saving/investment **iₜ = s yₜ** per effective worker. The saving rate **s** is dimensionless and appears in the controls and live tracker.
-- At a shock in period τ, **kτ, Aτ and Nτ are predetermined**. The new parameters apply to production, allocation and marginal products in τ, and to accumulation and factor growth from τ to τ+1. A γ or n shock causes no instantaneous jump in A or N.
-- The model is deterministic. These are transition paths in levels, rather than stochastic impulse responses.
-
-The live tracker reports marginal products of **physical capital** and **raw labor**:
-
-```math
-\mathrm{MPK}_t=\alpha\frac{y_t}{k_t},\qquad
-\mathrm{MPL}_t=(1-\alpha)A_ty_t.
-```
-
-MPL is the competitive wage per worker, not per effective worker. A and N levels compound using the growth factor applicable to each dated transition. γ and n themselves remain constant within each regime. MPK is a gross production marginal product, before subtracting depreciation.
-
-The golden-rule capital stock solves `f'(k) = γ n − 1 + δ`. For Cobb–Douglas, the golden-rule saving rate is **s = α**. A rise in saving always reduces current consumption at a fixed capital stock, but need not raise long-run consumption. The dashboard compares steady-state consumption explicitly and flags saving above the golden rule. A custom k₀ can introduce a preexisting transition, so the steady-state comparison is not necessarily a comparison with initial actual consumption.
-
-## Layout and interaction
-
-Desktop: one viewport with the main diagram on the left, three time paths in the middle, and parameter/live controls on the right. Designed for desktop viewports of at least 1024 × 660 CSS pixels. On narrower screens or with large browser zoom, the layout stacks vertically to preserve readability and access; scrolling is then intentional. Model notes open in a dismissible dialog. Range controls are keyboard accessible. Animation starts only when requested.
-
-The model diagram keeps equal axis scaling. Both regime curves remain visible for comparison; the active regime badge changes at the shock date. Changing a slider redraws the curve immediately. Parameters do not gradually morph during an economically instantaneous shock. Small graphs are independently scaled and have labeled axes; their visual amplitudes should not be compared without reading those scales.
+`npm run build` combines `ramsey-model.js` and `ramsey-ui.js` into `ramsey-app.js`. Commit the regenerated `ramsey-app.js` along with source changes so GitHub Pages serves the updated model. `npm test` runs the economic model tests and a local server/runtime integration check.
 
 ## Project files
 
-| File | Purpose |
+| File or folder | Purpose |
 | --- | --- |
-| `index.html` | Dashboard structure and model notes |
-| `styles.css` | Desktop canvas and responsive layouts |
-| `model.js` | Pure model functions and dated simulation |
-| `app.js` | Parameter state, chart drawing, and animation |
-| `model.test.js` | Economic and numerical checks |
-| `server.mjs` | Local static development server |
-| `start-local.bat` / `start-local.sh` | Local launchers |
-| `vendor/katex/` | Offline LaTeX rendering, fonts, and license |
-| `.nojekyll` | Plain static GitHub Pages publishing |
+| `index.html`, `styles.css` | Page structure, equations, layout, and responsive styling |
+| `model.js`, `solow-app.js` | Solow model logic, graphs, controls, and animation |
+| `ramsey-model.js`, `ramsey-ui.js` | Ramsey equations, phase diagram, controls, and animation source |
+| `ramsey-app.js` | Generated standalone Ramsey script used by the page |
+| `build-ramsey.mjs` | Rebuilds `ramsey-app.js` after Ramsey source changes |
+| `model.test.js`, `ramsey-model.test.js`, `qa/` | Economic and runtime checks |
+| `server.mjs`, `start-local.*` | Local development server and launch scripts |
+| `vendor/katex/` | Local LaTeX rendering library, fonts, and license |
+| `.nojekyll` | Keeps GitHub Pages publishing the static files directly |
 
-The model is separated from presentation so Ramsey and other models can be added later. Ramsey is a future-model label, not a working model in this release.
+The `*-js.txt` files are optional text copies for convenience. They are not loaded by the dashboard.
 
-## Validation
+## Acknowledgments
 
-The six automated model tests pass. Browser preview was blocked in the build environment, so visual layout and browser interactions have not been visually verified. JavaScript syntax and all local asset references were checked.
-
-Run `npm test`. Checks cover the exact steady state over several calibrations, shock timing, consumption impact and recovery, aggregate capital accounting, factor payments, numerical marginal products, the golden rule, positive boundary paths, and convergence from both sides.
-
-Third-party KaTeX is provided under its bundled MIT license in `vendor/katex/LICENSE`. Lecture PDFs are not redistributed in this package.
+The model notation and lecture-level treatment follow Tobias Broer's Macro I materials on the Solow and Ramsey models. KaTeX is distributed under the MIT license; see `vendor/katex/LICENSE`.
