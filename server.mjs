@@ -6,8 +6,11 @@ import { fileURLToPath } from 'node:url';
 const root = new URL('./', import.meta.url);
 const allowed = new Map([
   ['index.html','text/html; charset=utf-8'], ['styles.css','text/css; charset=utf-8'],
-  ['solow-app.js','text/javascript; charset=utf-8'], ['app.js','text/javascript; charset=utf-8'], ['model.js','text/javascript; charset=utf-8'],
+  ['solow/index.html','text/html; charset=utf-8'], ['ramsey/index.html','text/html; charset=utf-8'],
+  ['session-state.js','text/javascript; charset=utf-8'],
+  ['solow-app.js','text/javascript; charset=utf-8'], ['app.js','text/javascript; charset=utf-8'], ['solow-model.js','text/javascript; charset=utf-8'],
   ['ramsey-app.js','text/javascript; charset=utf-8'], ['ramsey-model.js','text/javascript; charset=utf-8'],
+  ['ramsey-ui.js','text/javascript; charset=utf-8'],
   ['favicon.svg','image/svg+xml']
 ]);
 allowed.set('vendor/katex/katex.min.js', 'text/javascript; charset=utf-8');
@@ -19,7 +22,12 @@ const port = Number(process.env.PORT || 8001);
 const server = http.createServer(async (req,res) => {
   try {
     const pathname = new URL(req.url, 'http://localhost').pathname;
-    const name = pathname === '/' ? 'index.html' : pathname.slice(1);
+    // Real directory pages, just like GitHub Pages and Python's static server.
+    if (pathname === '/solow' || pathname === '/ramsey') {
+      res.writeHead(301, {Location: pathname + '/' + new URL(req.url, 'http://localhost').search});
+      res.end();return;
+    }
+    const name = pathname.endsWith('/') ? pathname.slice(1) + 'index.html' : pathname.slice(1);
     if (!allowed.has(name)) { res.writeHead(404);res.end('Not found');return; }
     const data = await readFile(fileURLToPath(new URL(name, root)));
     res.writeHead(200, {'Content-Type':allowed.get(name), 'Cache-Control':'no-store'});

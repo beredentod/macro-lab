@@ -15,7 +15,7 @@ Explore how saving, growth, depreciation, preferences, and policy shape an econo
 | **Solow** | The law of motion for capital per effective worker, the 45-degree line, steady states, and the golden rule | Saving, depreciation, capital-share, technology-growth, and population-growth changes |
 | **Ramsey** | The $(k_t,c_t)$ phase diagram, nullclines, steady state, and stable saddle path | CRRA utility, capital-income taxes, announced and surprise policy changes, and off-saddle initial consumption |
 
-Both tabs include animated transition paths and time graphs. Ramsey adds a transversality-condition diagnostic, nearby unstable paths, and foldable graph and control sections. The Solow tab includes aggregate series and a golden-rule benchmark.
+Both model pages include animated transition paths and time graphs. Ramsey adds a transversality-condition diagnostic, nearby unstable paths, and foldable graph and control sections. The Solow tab includes aggregate series and a golden-rule benchmark.
 
 ## Model notes
 
@@ -44,21 +44,33 @@ The Ramsey tab uses CRRA utility, with logarithmic utility at $\sigma=1$, and a 
 
 Capital-income tax experiments use the after-tax return in the Euler equation, with tax receipts returned as lump-sum transfers. With a positive tax, the resulting steady state is a taxed equilibrium rather than the undistorted planner optimum. Anticipated changes are announced at $t=0$; unanticipated changes take effect at the selected shock date. The transversality indicator diagnoses whether the selected path follows the stable saddle path or diverges from it.
 
+## Separate model pages
+
+The model links in the header retain the dashboard's original appearance, but open independent pages:
+
+- [Solow](https://beredentod.github.io/macro-lab/solow/)
+- [Ramsey](https://beredentod.github.io/macro-lab/ramsey/)
+
+The original `/macro-lab/` address redirects to Solow. Each page loads only its own model, controls, graphs, and animation loop. Both pages share the stylesheet, KaTeX, and a small session-state helper. No backend or build step is required.
+
+When you leave a model, playback pauses and its parameters, current period, speed, and panel settings are saved in this browser tab's session storage. Returning to the model restores those settings with playback paused. Ramsey also remembers expanded sections. State is scoped to the site's path and the model; closing the browser tab ends the session. If browser storage is unavailable, the pages still work with default settings on return. This also works with browser Back and Forward.
+
 ## Project files
 
 | File or folder | Purpose |
 | --- | --- |
-| `index.html`, `styles.css` | Page structure, equations, layout, and responsive styling |
-| `model.js`, `solow-app.js` | Solow model logic, graphs, controls, and animation |
-| `ramsey-model.js`, `ramsey-ui.js` | Ramsey equations, phase diagram, controls, and animation source |
-| `ramsey-app.js` | Generated standalone Ramsey script used by the page |
-| `build-ramsey.mjs` | Rebuilds `ramsey-app.js` after Ramsey source changes |
-| `model.test.js`, `ramsey-model.test.js`, `qa/` | Economic and runtime checks |
-| `server.mjs`, `start-local.*` | Local development server and launch scripts |
+| `index.html` | Redirects the original home address to `solow/` |
+| `solow/index.html` | Solow dashboard, navigation, and model notes |
+| `ramsey/index.html` | Ramsey dashboard, navigation, and model notes |
+| `styles.css` | Shared layout and responsive styling |
+| `solow-model.js`, `solow-app.js` | Solow equations, graphs, controls, and animation |
+| `ramsey-model.js`, `ramsey-ui.js` | Ramsey equations, graphs, controls, and animation |
+| `ramsey-app.js` | Small module entry point that loads the Ramsey UI |
+| `session-state.js` | Saves and restores model settings when navigating between pages |
+| `solow-model.test.js`, `ramsey-model-test.js` | Economic model tests |
+| `server.mjs`, `start-local.bat` | Local development server and Windows launcher |
 | `vendor/katex/` | Local LaTeX rendering library, fonts, and license |
 | `.nojekyll` | Keeps GitHub Pages publishing the static files directly |
-
-The `*-js.txt` files are optional text copies for convenience. They are not loaded by the dashboard.
 
 ## Run locally
 
@@ -73,7 +85,7 @@ The `*-js.txt` files are optional text copies for convenience. They are not load
 
 3. Visit <http://localhost:8001>. Keep the terminal open while using the dashboard. Stop the server with `Ctrl+C`.
 
-You can also double-click `start-local.bat` on Windows, or run `sh start-local.sh` on macOS or Linux. Alternatively, Python can serve the folder with `python -m http.server 8001`. Use a local server rather than opening `index.html` directly, because browsers restrict JavaScript modules on `file://` URLs.
+You can also double-click `start-local.bat` on Windows. The launcher works without modification. Alternatively, Python can serve the folder with `python -m http.server 8001`. Use a local server rather than opening `index.html` directly, because browsers restrict JavaScript modules on `file://` URLs.
 
 To use a different port, set `PORT` before starting the Node server. For example, on macOS or Linux:
 
@@ -85,14 +97,24 @@ In PowerShell, use `$env:PORT=8002; npm start`.
 
 ## Develop and test
 
-The checked-in browser scripts run as-is. When changing the Ramsey model source, rebuild the standalone browser script and run the tests:
+The browser loads the checked-in source files directly. Edit `model.js` or `solow-app.js` for Solow; edit `ramsey-model.js` or `ramsey-ui.js` for Ramsey. There is no generated Ramsey bundle to rebuild.
 
 ```sh
-npm run build
 npm test
 ```
 
-`npm run build` combines `ramsey-model.js` and `ramsey-ui.js` into `ramsey-app.js`. Commit the regenerated `ramsey-app.js` along with source changes so GitHub Pages serves the updated model. `npm test` runs the economic model tests and a local server/runtime integration check.
+The tests cover both economic models. The saving-shock test uses an explicit initial saving rate so its assumptions do not depend on the dashboard's default.
+
+To add another model:
+
+1. Create a directory such as `olg/` containing its own `index.html`.
+2. Reuse the existing header and shared styles, with asset paths starting with `../`.
+3. Load only the new model's entry script on that page.
+4. Add the model link to each page's header, marking the current page with `active` and `aria-current="page"`.
+5. Add its page and scripts to the local server's `allowed` map and its directory redirect list. GitHub Pages discovers the new directory automatically.
+6. If the model should remember settings, use `connectSessionState` with a unique model name.
+
+Publish by committing the changed files and new model directories to the existing GitHub Pages source branch. Keep all unchanged root files and `vendor/` in place. Real directory pages make direct visits and refreshes work without a single-page routing fallback.
 
 ## Acknowledgments
 

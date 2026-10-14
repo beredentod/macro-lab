@@ -1,4 +1,5 @@
-import {DEFAULTS,production,nextCapital,steadyState,goldenCapital,simulate,observe} from './model.js';
+import {DEFAULTS,production,nextCapital,steadyState,goldenCapital,simulate,observe} from './solow-model.js';
+import {connectSessionState,validModelState} from './session-state.js';
 const $=id=>document.getElementById(id);
 const C={teal:'#087d73',ink:'#263d36',muted:'#82918c',grid:'#edf1ef',base:'#8d9fa6',amber:'#be7a24',faint:'#b5d2cb',golden:'#7956a3'};
 const specs=[
@@ -250,5 +251,16 @@ $('panel-collapse').onclick=()=>setPanelHidden(true);$('panel-expand').onclick=(
 zoomDialog.addEventListener('click',e=>{if(e.target===zoomDialog){const r=zoomDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)zoomDialog.close();}});
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 const resizeObserver=new ResizeObserver(()=>needsDraw=true);resizeObserver.observe(workspace);resizeObserver.observe(zoomDialog);
-document.addEventListener('macro-model-change',event=>{if(event.detail.model!=='solow')pause();needsDraw=true;});
+connectSessionState('solow',workspace,{
+ capture:()=>({before,after,k0,lockInitial,tau,horizon,mode,time,showGolden,
+   production:$('production').checked,speed:$('speed').value,controlsHidden:workspace.classList.contains('controls-hidden')}),
+ restore:state=>{
+   if(!validModelState(state,specs,state?.lockInitial?Number.MAX_VALUE:1e9)||['lockInitial','showGolden','production'].some(key=>typeof state[key]!=='boolean'))return false;
+   ({before,after,k0,lockInitial,tau,horizon,mode,time,showGolden}=state);
+   $('production').checked=state.production;$('speed').value=state.speed;
+   workspace.classList.toggle('controls-hidden',state.controlsHidden);
+   $('panel-expand').hidden=!state.controlsHidden;$('panel-collapse').setAttribute('aria-expanded',String(!state.controlsHidden));
+   return true;
+ },pause
+});
 allTex();buildSliders();recompute();requestAnimationFrame(frame);

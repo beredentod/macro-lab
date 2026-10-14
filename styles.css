@@ -196,10 +196,11 @@ i.golden{display:inline-block;width:15px;border-top:2px dashed #7956a3;vertical-
 .workspace.controls-hidden #panel-expand{top:56px}
 @media(max-width:999px){.workspace.controls-hidden #panel-expand{top:66px;right:8px}}
 
-/* Ramsey tab keeps the Solow DOM and state independent. */
+/* Model links retain the original tab appearance on separate pages. */
 .workspace[hidden],#ramsey-workspace[hidden]{display:none!important}
-.model-tab{border:0;border-radius:0;background:transparent;color:#82918c;padding:13px 0;white-space:nowrap;font-size:14px}
+.model-tab{text-decoration:none;cursor:pointer;border:0;border-radius:0;background:transparent;color:#82918c;padding:13px 0;white-space:nowrap;font-size:14px}
 .model-tab.active{color:var(--teal);font-weight:600;border-bottom:2px solid var(--teal)}
+.model-tab:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 .model-tab:hover{background:transparent;color:var(--teal)}
 .ramsey-active #help,.ramsey-active #reset{display:inline-flex}
 .ramsey-workspace .plots{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}

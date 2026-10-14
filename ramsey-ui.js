@@ -1,4 +1,6 @@
-/* UI source. build-ramsey.mjs combines this with ramsey-model.js for the browser. */
+import {RAMSEY_DEFAULTS, f, mpk, utility, nextK, nextC, kNull, cNull, steady, simulateRamsey, unstableRamsey} from './ramsey-model.js';
+import {connectSessionState, validModelState} from './session-state.js';
+
 function initializeRamsey() {
  const $ = id => {
   const node = document.getElementById(id);
@@ -276,7 +278,8 @@ function initializeRamsey() {
  listen('r-unstable','click',()=>{showUnstable=!showUnstable;sync();});
  listen('r-c0-deviation','input',e=>change(()=>consumptionDeviation=+e.target.value/100,0));
  listen('r-c0-restore','click',()=>change(()=>consumptionDeviation=0,0));
- listen('r-reset','click',()=>change(()=>{before={...RAMSEY_DEFAULTS};after={...RAMSEY_DEFAULTS};locked=true;mode='after';tau=20;horizon=160;anticipated=false;consumptionDeviation=0;showUnstable=false;},0));
+ const resetRamsey=()=>change(()=>{before={...RAMSEY_DEFAULTS};after={...RAMSEY_DEFAULTS};locked=true;mode='after';tau=20;horizon=160;anticipated=false;consumptionDeviation=0;showUnstable=false;},0);
+ $('reset').addEventListener('click',event=>{if(workspace.hidden)return;event.preventDefault?.();event.stopImmediatePropagation?.();resetRamsey();},true);
  workspace.querySelectorAll('[data-r-preset]').forEach(button=>button.addEventListener('click',()=>{
   const accepted=change(()=>{
    after={...before};mode='after';
@@ -290,14 +293,25 @@ function initializeRamsey() {
   },anticipated?0:tau-1);if(accepted)play();
  }));
  listen('r-phase-zoom','click',()=>openZoom('phase'));listen('r-zoom-close','click',()=>$('r-zoom').close());
- listen('r-help','click',()=>$('r-model-dialog').showModal());listen('r-help-close','click',()=>$('r-model-dialog').close());
+ $('help').addEventListener('click',event=>{if(workspace.hidden)return;event.preventDefault?.();event.stopImmediatePropagation?.();$('r-model-dialog').showModal();},true);
+ listen('r-help-close','click',()=>$('r-model-dialog').close());
  listen('r-panel-hide','click',()=>{workspace.classList.add('controls-hidden');$('r-panel-show').hidden=false;dirty=true;});
  listen('r-panel-show','click',()=>{workspace.classList.remove('controls-hidden');$('r-panel-show').hidden=true;dirty=true;});
- document.addEventListener('macro-model-change',event=>{if(event.detail.model!=='ramsey')pause();dirty=true;});
  $('help-footer').addEventListener('click',e=>{if(!workspace.hidden){e.stopImmediatePropagation();$('r-model-dialog').showModal();}},true);
  if(window.ResizeObserver){const observer=new ResizeObserver(()=>dirty=true);observer.observe(workspace);observer.observe($('r-zoom'));}
  window.addEventListener('resize',()=>dirty=true);
- recompute();sync();document.body.dataset.ramseyStatus='ready';requestAnimationFrame(frame);
+ connectSessionState('ramsey',workspace,{
+  capture:()=>({before,after,k0,locked,mode,tau,horizon,time,anticipated,showUnstable,consumptionDeviation,
+    speed:$('r-speed').value,controlsHidden:workspace.classList.contains('controls-hidden')}),
+  restore:state=>{
+    if(!validModelState(state,specs,state?.locked?Number.MAX_VALUE:1000)||['locked','anticipated','showUnstable'].some(key=>typeof state[key]!=='boolean')
+       ||!Number.isFinite(state.consumptionDeviation)||Math.abs(state.consumptionDeviation)>.08)return false;
+    ({before,after,k0,locked,mode,tau,horizon,time,anticipated,showUnstable,consumptionDeviation}=state);
+    $('r-speed').value=state.speed;workspace.classList.toggle('controls-hidden',state.controlsHidden);
+    $('r-panel-show').hidden=!state.controlsHidden;return true;
+  },pause
+ });
+ recompute();time=Math.min(time,endTime);sync();document.body.dataset.ramseyStatus='ready';requestAnimationFrame(frame);
 }
 function startRamsey() {
  try { initializeRamsey(); }

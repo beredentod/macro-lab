@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {DEFAULTS,production,nextCapital,steadyState,goldenCapital,simulate} from './model.js';
+import {DEFAULTS,production,nextCapital,steadyState,goldenCapital,simulate} from './solow-model.js';
 const close=(a,b,tol=1e-10)=>assert.ok(Math.abs(a-b)<tol*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 test('steady state solves the exact discrete law, including growth and theta',()=>{
  for(const alpha of [.1,1/3,.7])for(const s of [.02,.2,.8])for(const gamma of [1,1.02,1.06]){
@@ -8,7 +8,7 @@ test('steady state solves the exact discrete law, including growth and theta',()
  }
 });
 test('savings shock has immediate consumption drop, predetermined capital, and eventual recovery',()=>{
- const b={...DEFAULTS},a={...b,s:.3},k=steadyState(b),r=simulate(b,a,k,20,1000);
+ const b={...DEFAULTS,s:.2},a={...b,s:.3},k=steadyState(b),r=simulate(b,a,k,20,1000);
  close(r[20].k,r[19].k);close(r[20].c/r[19].c,.7/.8);assert.ok(r[21].k>r[20].k);assert.ok(r[1000].c>r[19].c);close(r[1000].k,steadyState(a));
  for(const x of r)close(x.c+x.i,x.y);
 });
